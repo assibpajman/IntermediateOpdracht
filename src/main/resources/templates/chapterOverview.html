@@ -8,9 +8,15 @@
 
 <h1>Overview of all the chapters</h1>
 
-<p>
-    Je vroeg om deze pagina om <span th:text="${requesttime}"></span>.
-</p>
+<table>
+    <th>
+        <td>Chapter</td>
+    </th>
+    <tr th:each="chapter : ${chapters}">
+        <td th:text="${chapter.chapterNumber}"></td>
+    </tr>
+</table>
+
 
 </body>
 </html>

@@ -1,10 +1,12 @@
 package ch17.assib.fortnite.controller;
 
+import ch17.assib.fortnite.model.Chapter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * @author Assib Pajman
@@ -14,9 +16,14 @@ import java.time.LocalDateTime;
 @Controller
 public class ChapterController {
 
-    @GetMapping("chapters")
+    @GetMapping("/chapters")
     private static String showChapterOverview(Model datamodel) {
-        datamodel.addAttribute("requesttime", LocalDateTime.now());
+        ArrayList<Chapter> chapters = new ArrayList<>();
+
+        chapters.add(new Chapter(1));
+        chapters.add(new Chapter(2));
+
+        datamodel.addAttribute("chapters", chapters);
 
         return "chapterOverview";
     }
