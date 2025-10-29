@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new chapter</title>
+</head>
+<body>
+
+<h1>Add a new chapter</h1>
+<!--hier snap ik niet al te veel van-->
+<form th:action="@{/chapter/save}" method="post" th:object="${formChapter}">
+    Title: <input type="text" th:field="*{chapterNumber}">
+    <input type="submit" value="Save chapter">
+</form>
+
+
+</body>
+</html>
