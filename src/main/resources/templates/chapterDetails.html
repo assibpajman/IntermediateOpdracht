@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail for a chapter</title>
+</head>
+<body>
+
+<h1>Detail for <span th:value="${chapter.chapterNumber}"></span></h1>
+
+<a th:href="@{/location/new/{chapterId}(chapterId = ${chapter.chapterId})}">Buy</a>
+<a th:href="@{/chapter/edit/{chapterNumber}(chapterNumber = ${chapter.chapterNumber})}">edit</a>
+<a th:href="@{/chapter/delete/{chapterId}(chapterId = ${chapter.chapterId})}">delete</a>
+
+<ul>
+    <li th:each="weapon : ${chapter.weapons}" th:text="${weapon.name}"></li>
+</ul>
+
+</body>
+</html>

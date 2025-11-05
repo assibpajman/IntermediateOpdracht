@@ -2,16 +2,16 @@ package ch17.assib.fortnite.controller;
 
 import ch17.assib.fortnite.model.Chapter;
 import ch17.assib.fortnite.repositories.ChapterRepository;
+import ch17.assib.fortnite.repositories.WeaponRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -21,9 +21,11 @@ import java.util.Optional;
 
 @Controller
 public class ChapterController {
+    private final WeaponRepository weaponRepository;
     private final ChapterRepository chapterRepository;
 
-    public ChapterController(ChapterRepository chapterRepository) {
+    public ChapterController(WeaponRepository weaponRepository, ChapterRepository chapterRepository) {
+        this.weaponRepository = weaponRepository;
         this.chapterRepository = chapterRepository;
     }
 
@@ -36,18 +38,30 @@ public class ChapterController {
     }
 
     @GetMapping("/chapter/add")
-    public String showChapterForm(Model datamodel) {
+    public String showChapterForm(Model datamodel, Chapter chapter) {
         datamodel.addAttribute("formChapter", new Chapter());
 
         return "chapterForm";
     }
 
     @PostMapping("/chapter/save")
-    public String saveOrUpdateChapter(@ModelAttribute("formChapter") Chapter chapter, BindingResult result) {
-        if (!result.hasErrors()) {
-            chapterRepository.save(chapter);
+    public String saveOrUpdateChapter(@ModelAttribute("formChapter") Chapter chapterToBeSaved,
+                                      BindingResult result,
+                                      Model datamodel) {
+        Optional<Chapter> chapterWithSameChapterNumber =
+                chapterRepository.findByChapterNumber(chapterToBeSaved.getChapterNumber());
+
+        if (chapterWithSameChapterNumber.isPresent() &&
+                !chapterWithSameChapterNumber.get().getChapterId().equals(chapterToBeSaved.getChapterId())) {
+            result.addError(new FieldError("chapter", "chapterNumber",
+                    "this chapter is already present"));
         }
 
+        if (result.hasErrors()) {
+            return showChapterForm(datamodel, chapterToBeSaved);
+        }
+
+        chapterRepository.save(chapterToBeSaved);
         return "redirect:/chapter/all";
     }
 
@@ -58,9 +72,9 @@ public class ChapterController {
         return "redirect:/chapter/all";
     }
 
-    @GetMapping("/chapter/edit/{chapterId}")
-    public String showEditChapterForm(@PathVariable("chapterId") Long chapterId, Model datamodel) {
-        Optional<Chapter> optionalChapter = chapterRepository.findById(chapterId);
+    @GetMapping("/chapter/edit/{chapterNumber}")
+    public String showEditChapterForm(@PathVariable("chapterNumber") Integer chapterNumber, Model datamodel) {
+        Optional<Chapter> optionalChapter = chapterRepository.findByChapterNumber(chapterNumber);
 
         if (optionalChapter.isPresent()) {
             datamodel.addAttribute("formChapter", optionalChapter.get());
@@ -68,5 +82,18 @@ public class ChapterController {
         }
 
         return "redirect:/chapter/all";
+    }
+
+    @GetMapping("/chapter/detail/{chapterNumber}")
+    public String showChapterDetailpage(@PathVariable("chapterNumber") Integer chapterNumber, Model datamodel) {
+        Optional<Chapter> chapterToShow = chapterRepository.findByChapterNumber(chapterNumber);
+
+        if (chapterToShow.isEmpty()) {
+            return "redirect:/chapter/all";
+        }
+
+        datamodel.addAttribute("chapter", chapterToShow.get());
+
+        return "chapterDetails";
     }
 }

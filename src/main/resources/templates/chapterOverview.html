@@ -20,11 +20,9 @@
     </thead>
 
     <tr th:each="chapter : ${chapters}">
-        <td th:text="${chapter.chapterNumber}"></td>
+        <td><a th:href="@{/chapter/detail/{chapterNumber}(chapterNumber =
+        ${chapter.chapterNumber})}" th:text="${chapter.chapterNumber}"></a></td>
         <td>number: <span th:text="${chapter.getNumberOfLocations()}"></span></td>
-        <td><a th:href="@{/location/new/{chapterId}(chapterId = ${chapter.getChapterId()})}">Buy</a></td>
-        <td><a th:href="@{/chapter/edit/{chapterId}(chapterId = ${chapter.getChapterId()})}">edit</a></td>
-        <td><a th:href="@{/chapter/delete/{chapterId}(chapterId = ${chapter.getChapterId()})}">delete</a></td>
     </tr>
 </table>
 
