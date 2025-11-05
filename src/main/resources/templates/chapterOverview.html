@@ -9,11 +9,22 @@
 <h1>Overview of all the chapters</h1>
 
 <table>
-    <th>
-        <td>Chapter</td>
-    </th>
+    <thead>
+        <tr>
+            <td>Chapter</td>
+            <td>Locations</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+
     <tr th:each="chapter : ${chapters}">
         <td th:text="${chapter.chapterNumber}"></td>
+        <td>number: <span th:text="${chapter.getNumberOfLocations()}"></span></td>
+        <td><a th:href="@{/location/new/{chapterId}(chapterId = ${chapter.getChapterId()})}">Buy</a></td>
+        <td><a th:href="@{/chapter/edit/{chapterId}(chapterId = ${chapter.getChapterId()})}">edit</a></td>
+        <td><a th:href="@{/chapter/delete/{chapterId}(chapterId = ${chapter.getChapterId()})}">delete</a></td>
     </tr>
 </table>
 

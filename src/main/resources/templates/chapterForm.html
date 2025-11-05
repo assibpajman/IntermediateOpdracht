@@ -9,6 +9,7 @@
 <h1>Add a new chapter</h1>
 <!--hier snap ik niet al te veel van-->
 <form th:action="@{/chapter/save}" method="post" th:object="${formChapter}">
+    <input type="hidden" th:field="*{chapterId}">
     Title: <input type="text" th:field="*{chapterNumber}">
     <input type="submit" value="Save chapter">
 </form>
