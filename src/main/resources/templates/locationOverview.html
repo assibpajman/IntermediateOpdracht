@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Overview of all the locations</title>
+</head>
+<body>
+
+<h1><a th:href="@{/}">Overview of all the locations</a></h1>
+
+
+<table>
+    <thead>
+        <tr>
+            <td>Location name</td>
+            <td></td>
+        </tr>
+    </thead>
+
+    <tr th:each="location : ${allLocations}">
+        <td th:text="${location.name}"></td>
+        <td><a th:href="@{/location/delete/{locationId}(locationId = ${location.locationId})}">delete</a></td>
+    </tr>
+</table>
+
+<form th:action="@{/location/save}" method="post" th:object="${formLocation}">
+    Name: <input type="text" th:field="*{name}"> <input type="submit" value="Add location">
+</form>
+
+</body>
+</html>

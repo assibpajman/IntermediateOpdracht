@@ -2,12 +2,13 @@ package ch17.assib.fortnite.controller;
 
 import ch17.assib.fortnite.model.Chapter;
 import ch17.assib.fortnite.model.Location;
+import ch17.assib.fortnite.model.Weapon;
 import ch17.assib.fortnite.repositories.ChapterRepository;
 import ch17.assib.fortnite.repositories.LocationRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -36,5 +37,29 @@ public class LocationController {
         }
 
         return "redirect:/chapter/all";
+    }
+
+    @GetMapping("/all")
+    public String showLocationOverview(Model datamodel) {
+        datamodel.addAttribute("allLocations", locationRepository.findAll());
+        datamodel.addAttribute("formLocation", new Location());
+
+        return "locationOverview";
+    }
+
+    @PostMapping("/save")
+    public String saveOrUpdateLocation(@ModelAttribute("formLocation") Location location, BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:/location/all";
+        }
+
+        locationRepository.save(location);
+        return "redirect:/location/all";
+    }
+
+    @GetMapping("/delete/{locationId}")
+    public String deleteLocation(@PathVariable("locationId") Long locationId) {
+        locationRepository.deleteById(locationId);
+        return "redirect:/location/all";
     }
 }

@@ -16,6 +16,7 @@ public class Location {
     private Long locationId;
 
     private Boolean available;
+    private String name;
 
     @ManyToOne
     private Chapter chapter;
@@ -43,6 +44,14 @@ public class Location {
 
     public void setAvailable(Boolean available) {
         this.available = available;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Chapter getChapter() {

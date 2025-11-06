@@ -6,13 +6,19 @@
 </head>
 <body>
 
-<h1>Add a new chapter</h1>
-<!--hier snap ik niet al te veel van-->
+<h1><a th:href="@{/}">Add a new chapter</a></h1>
 <form th:action="@{/chapter/save}" method="post" th:object="${formChapter}">
     <input type="hidden" th:field="*{chapterId}">
     Title: <input type="text" th:field="*{chapterNumber}">
 
+    Weapon:
+    <select th:field="*{weapons}" multiple>
+        <option th:each="weapon : ${allWeapons}"
+                th:text="${weapon.name}"
+                th:value="${weapon.weaponId}">
 
+        </option>
+    </select>
     <input type="submit" value="Save chapter">
 </form>
 

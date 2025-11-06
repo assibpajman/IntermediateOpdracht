@@ -29,10 +29,11 @@ public class ChapterController {
         this.chapterRepository = chapterRepository;
     }
 
-    @GetMapping({"/chapter/all", "/"})
-    private String showChapterOverview(Model datamodel) {
+    @GetMapping({"/chapter/all"})
+    private String showChapterOverview(Model datamodel, Chapter chapter) {
 
         datamodel.addAttribute("chapters", chapterRepository.findAll());
+        datamodel.addAttribute("formChapter", new Chapter());
 
         return "chapterOverview";
     }
@@ -40,6 +41,7 @@ public class ChapterController {
     @GetMapping("/chapter/add")
     public String showChapterForm(Model datamodel, Chapter chapter) {
         datamodel.addAttribute("formChapter", new Chapter());
+        datamodel.addAttribute("allWeapons", weaponRepository.findAll());
 
         return "chapterForm";
     }
@@ -78,6 +80,8 @@ public class ChapterController {
 
         if (optionalChapter.isPresent()) {
             datamodel.addAttribute("formChapter", optionalChapter.get());
+            datamodel.addAttribute("allWeapons", weaponRepository.findAll());
+
             return "chapterForm";
         }
 

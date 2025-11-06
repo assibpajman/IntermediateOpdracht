@@ -6,27 +6,26 @@
 </head>
 <body>
 
-<h1>Overview of all the chapters</h1>
+<h1><a th:href="@{/}">Overview of all the chapters</a></h1>
 
 <table>
     <thead>
         <tr>
             <td>Chapter</td>
-            <td>Locations</td>
-            <td></td>
-            <td></td>
-            <td></td>
         </tr>
     </thead>
 
     <tr th:each="chapter : ${chapters}">
         <td><a th:href="@{/chapter/detail/{chapterNumber}(chapterNumber =
         ${chapter.chapterNumber})}" th:text="${chapter.chapterNumber}"></a></td>
-        <td>number: <span th:text="${chapter.getNumberOfLocations()}"></span></td>
     </tr>
 </table>
 
-<a th:href="@{/chapter/add}">Add a new chapter</a>
+<form th:action="@{/chapter/save}" method="post" th:object="${formChapter}">
+    Chapter: <input type="text" th:field="*{chapterNumber}"> <input type="submit" value="Add chapter">
+</form>
+
+<!--<a th:href="@{/chapter/add}">Add a new chapter</a>-->
 
 </body>
 </html>
